@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập - Exercise 11 (Unit 3 Vocabulary)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 15px; color: #334155; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #4f46e5; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .word-bank-box { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 12px; margin-bottom: 20px; text-align: center; font-size: 14px; color: #3730a3; }
+        .word-bank-box strong { display: block; margin-bottom: 5px; color: #4f46e5; }
+        .question-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .section-tag { font-size: 12px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-bottom: 5px; }
+        .q-title { font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+        .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+        .option-label:hover { background: #eef2ff; }
+        .explanation { margin-top: 10px; padding: 10px; font-size: 13px; border-radius: 6px; display: none; }
+        .explanation.correct { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: block; }
+        .explanation.incorrect { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; display: block; }
+        .explanation.unanswered { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        #submit-btn { background: #4f46e5; color: white; }
+        #reset-btn { background: #e2e8f0; color: #334155; }
+        #result-box { margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; display: none; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Exercise 11: Unit 3 Vocabulary</h1>
+    <p class="subtitle">Điền từ thích hợp (Đã chuyển thành trắc nghiệm, xáo trộn đề)</p>
+    
+    <div class="word-bank-box">
+        <strong>Cho các từ/cụm từ gợi ý trong khung:</strong>
+        anxiety, appropriately, assignment, deadline, delay, minimise, mood, optimistic, physical, priority[cite: 16]
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <div class="btn-group">
+        <button id="submit-btn" class="action-btn" onclick="checkAnswers()">Nộp Bài & Xem Kết Quả</button>
+        <button id="reset-btn" class="action-btn" onclick="loadQuiz()">🔄 Trộn Đề & Làm Lại</button>
+    </div>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    const rawQuestions = [
+        {
+            section: "Exercise 11",
+            question: "1. The science _______ must be handed in before Friday.",
+            options: [
+                { text: "assignment", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: assignment (bài tập khoa học)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "2. We should speak _______ when we discuss a sensitive problem with a friend.",
+            options: [
+                { text: "assignment", isCorrect: false },
+                { text: "appropriately", isCorrect: true },
+                { text: "minimise", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: appropriately (phù hợp, khéo léo)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "3. A short walk can improve your _______ after a stressful lesson.",
+            options: [
+                { text: "mood", isCorrect: true },
+                { text: "deadline", isCorrect: false },
+                { text: "anxiety", isCorrect: false },
+                { text: "priority", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: mood (tâm trạng)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "4. The final _______ for the poster competition is 30 September.",
+            options: [
+                { text: "delay", isCorrect: false },
+                { text: "deadline", isCorrect: true },
+                { text: "optimistic", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: deadline (hạn chót)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "5. Good time management can help _______ stress before examinations.",
+            options: [
+                { text: "minimise", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "anxiety", isCorrect: false },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: minimise (giảm thiểu)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "6. Do not _______ asking for help when you feel unable to cope.",
+            options: [
+                { text: "minimise", isCorrect: false },
+                { text: "delay", isCorrect: true },
+                { text: "optimistic", isCorrect: false },
+                { text: "priority", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: delay (trì hoãn)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "7. Sleep and _______ activity are both important for teenage health.",
+            options: [
+                { text: "physical", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "anxiety", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: physical (thể chất)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "8. Linh is _______ that she will achieve her study goals.",
+            options: [
+                { text: "delay", isCorrect: false },
+                { text: "optimistic", isCorrect: true },
+                { text: "priority", isCorrect: false },
+                { text: "assignment", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: optimistic (lạc quan)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "9. Finishing the most urgent task first should be your top _______.",
+            options: [
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "priority", isCorrect: true },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: priority (sự ưu tiên hàng đầu)[cite: 15, 16, 18]."
+        },
+        {
+            section: "Exercise 11",
+            question: "10. Deep breathing may reduce _______ before a presentation.",
+            options: [
+                { text: "anxiety", isCorrect: true },
+                { text: "assignment", isCorrect: false },
+                { text: "mood", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: anxiety (sự lo lắng, băn khoăn)[cite: 15, 16, 18]."
+        }
+    ];
+
+    let activeQuestions = [];
+
+    function shuffle(array) {
+        let arr = JSON.parse(JSON.stringify(array));
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function loadQuiz() {
+        activeQuestions = shuffle(rawQuestions).map((q, index) => ({
+            id: index + 1,
+            section: q.section,
+            question: q.question,
+            options: shuffle(q.options),
+            explanation: q.explanation
+        }));
+
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        activeQuestions.forEach((q, qIndex) => {
+            let optionsHtml = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label">
+                        <input type="radio" name="q-${qIndex}" value="${optIndex}">
+                        <strong>${labels[optIndex]}.</strong>
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="question-card">
+                    <div class="section-tag">${q.section}</div>
+                    <div class="q-title">Câu ${q.id}: ${q.question}</div>
+                    <div>${optionsHtml}</div>
+                    <div id="exp-${qIndex}" class="explanation"></div>
+                </div>
+            `;
+        });
+
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function checkAnswers() {
+        let score = 0;
+
+        activeQuestions.forEach((q, qIndex) => {
+            const selected = document.querySelector(`input[name="q-${qIndex}"]:checked`);
+            const expBox = document.getElementById(`exp-${qIndex}`);
+
+            if (selected) {
+                const selectedIdx = parseInt(selected.value);
+                if (q.options[selectedIdx].isCorrect) {
+                    score++;
+                    expBox.className = "explanation correct";
+                    expBox.innerHTML = `<strong>Chính xác!</strong> ${q.explanation}`;
+                } else {
+                    expBox.className = "explanation incorrect";
+                    expBox.innerHTML = `<strong>Chưa đúng.</strong> ${q.explanation}`;
+                }
+            } else {
+                expBox.className = "explanation unanswered";
+                expBox.innerHTML = `<strong>Bạn chưa chọn!</strong> ${q.explanation}`;
+            }
+        });
+
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `Kết quả của bạn: ${score} / ${activeQuestions.length} câu đúng!`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>
