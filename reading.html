@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập GK1 - Phần 3 (Reading Ex 5 - 8)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 15px; color: #334155; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #4f46e5; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .passage-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: #166534; }
+        .passage-box h3 { margin-top: 0; font-size: 16px; color: #15803d; border-bottom: 1px solid #bbf7d0; padding-bottom: 5px; }
+        .question-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .section-tag { font-size: 12px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-bottom: 5px; }
+        .q-title { font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+        .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+        .option-label:hover { background: #eef2ff; }
+        .explanation { margin-top: 10px; padding: 10px; font-size: 13px; border-radius: 6px; display: none; }
+        .explanation.correct { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: block; }
+        .explanation.incorrect { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; display: block; }
+        .explanation.unanswered { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        #submit-btn { background: #4f46e5; color: white; }
+        #reset-btn { background: #e2e8f0; color: #334155; }
+        #result-box { margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; display: none; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn Tập GK1 - Phần 3 (Reading)</h1>
+    <p class="subtitle">Exercise 5 đến Exercise 8 (Có kèm nội dung bài đọc)</p>
+    
+    <div id="quiz-container"></div>
+
+    <div class="btn-group">
+        <button id="submit-btn" class="action-btn" onclick="checkAnswers()">Nộp Bài & Xem Kết Quả</button>
+        <button id="reset-btn" class="action-btn" onclick="loadQuiz()">🔄 Trộn Đề & Làm Lại</button>
+    </div>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    const rawQuestions = [
+        // Ex 5
+        {
+            section: "Exercise 5: Reading Passage 1",
+            passage: `<strong>Reading Passage (Ex 5):</strong> Green Lane used to have an empty courtyard behind its community hall. Last spring, a group of students interviewed local residents and discovered that several artisans had no suitable place to sell their products. The residents therefore turned the courtyard into a monthly craft market.<br><br>
+            On the first Saturday of each month, visitors can watch Mrs Lien shape clay pots and learn how Mr Bao makes bamboo baskets. Teenagers help label the handicrafts and show visitors around. Mr Phuc, the local garbage collector, also gives a short talk on sorting rubbish. Separate bins are placed near every stall.<br><br>
+            The organisers do not allow single-use plastic bags. Instead, sellers wrap products in recycled paper. Part of the money earned from the market is used to repair the playground and plant trees. Since the project began, neighbours have got to know one another better, and the market has attracted visitors from nearby districts. Next month, the organisers will offer a free basket-making workshop for young people[cite: 11].`,
+            questions: [
+                {
+                    q: "1. What is the passage mainly about?",
+                    options: [
+                        { text: "A new shopping mall", isCorrect: false },
+                        { text: "A school recycling lesson", isCorrect: false },
+                        { text: "A community craft-market project", isCorrect: true },
+                        { text: "A pottery factory", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: A community craft-market project[cite: 11, 17]."
+                },
+                {
+                    q: "2. Why did residents create the craft market?",
+                    options: [
+                        { text: "The community hall was too small.", isCorrect: false },
+                        { text: "Students wanted a place to play.", isCorrect: false },
+                        { text: "Local artisans needed a suitable place to sell products.", isCorrect: true },
+                        { text: "Visitors asked for more restaurants.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: Local artisans needed a suitable place to sell products[cite: 11, 17]."
+                },
+                {
+                    q: "3. What does Mr Phuc do at the market?",
+                    options: [
+                        { text: "He talks about sorting rubbish.", isCorrect: true },
+                        { text: "He repairs the playground.", isCorrect: false },
+                        { text: "He sells bamboo baskets.", isCorrect: false },
+                        { text: "He interviews the visitors.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: He talks about sorting rubbish[cite: 11, 17]."
+                },
+                {
+                    q: "4. The word 'earned' in paragraph 3 is closest in meaning to:",
+                    options: [
+                        { text: "borrowed", isCorrect: false },
+                        { text: "saved", isCorrect: false },
+                        { text: "spent", isCorrect: false },
+                        { text: "received for work or sales", isCorrect: true }
+                    ],
+                    explanation: "Đáp án đúng: received for work or sales[cite: 11, 17]."
+                },
+                {
+                    q: "5. What can be inferred about the project?",
+                    options: [
+                        { text: "It benefits only the artisans.", isCorrect: false },
+                        { text: "It improves both community relationships and the local environment.", isCorrect: true },
+                        { text: "It will stop after next month.", isCorrect: false },
+                        { text: "It makes traditional skills less important.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: It improves both community relationships and the local environment[cite: 11, 17]."
+                }
+            ]
+        },
+        // Ex 6 - True / False
+        {
+            section: "Exercise 6: True / False Reading",
+            passage: `<strong>Reading Passage (Ex 6):</strong> Last Tuesday evening, the electricity suddenly went off in the Sunrise apartment building after a heavy storm. At first, some residents thought the whole neighbourhood had lost power, but the streetlights outside were still working. The building manager called Ms Hoa, a local electrician.<br><br>
+            Ms Hoa arrived within thirty minutes. She first switched off the main power supply and asked everyone not to touch the sockets. After checking the electrical box, she found that rainwater had damaged a wire. She replaced it, tested the system carefully, and restored the electricity.<br><br>
+            Before leaving, Ms Hoa explained what residents should do if they noticed a burning smell or sparks. She also advised the manager to have the system checked before the next rainy season. The residents appreciated both her skill and her responsible attitude[cite: 12].`,
+            questions: [
+                {
+                    q: "6. The power failure affected the whole neighbourhood.",
+                    options: [
+                        { text: "True", isCorrect: true },
+                        { text: "False", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: True[cite: 12, 17]."
+                },
+                {
+                    q: "7. Ms Hoa found a damaged wire in the building's electrical system.",
+                    options: [
+                        { text: "True", isCorrect: true },
+                        { text: "False", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: True[cite: 12, 17]."
+                },
+                {
+                    q: "8. Ms Hoa repaired the wire before switching off the main power supply.",
+                    options: [
+                        { text: "True", isCorrect: false },
+                        { text: "False", isCorrect: true }
+                    ],
+                    explanation: "Đáp án đúng: False (cô ấy ngắt điện trước khi sửa)[cite: 12, 17]."
+                },
+                {
+                    q: "9. She gave the residents advice about electrical safety.",
+                    options: [
+                        { text: "True", isCorrect: true },
+                        { text: "False", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: True[cite: 12, 17]."
+                },
+                {
+                    q: "10. Ms Hoa's visit only restored the electricity and did not help prevent future problems.",
+                    options: [
+                        { text: "True", isCorrect: false },
+                        { text: "False", isCorrect: true }
+                    ],
+                    explanation: "Đáp án đúng: False[cite: 12, 17]."
+                }
+            ]
+        },
+        // Ex 7
+        {
+            section: "Exercise 7: Reading Passage 2",
+            passage: `<strong>Reading Passage (Ex 7):</strong> Last year, traffic around three schools in Westbridge became seriously congested at drop-off and pick-up times. The city council began a three-month School Streets pilot to test a possible solution. During two short periods each school day, most cars were not allowed to enter the roads beside the schools. Residents and emergency vehicles could still use them.<br><br>
+            Families who lived farther away could leave their cars at a public car park and take a free electric shuttle bus. More students also began walking or cycling. The council added temporary crossings and asked police officers to guide traffic during the first week.<br><br>
+            After three months, the number of vehicles near the school gates had fallen by 40 per cent. Air quality improved, and fewer students arrived late. Some shop owners had worried that the plan would reduce their sales. However, a survey showed that sales stayed almost the same because parents still visited the shops after parking farther away. The council now plans to continue the programme and build safer permanent crossings[cite: 12].`,
+            questions: [
+                {
+                    q: "11. What is the main purpose of the passage?",
+                    options: [
+                        { text: "To compare three schools", isCorrect: false },
+                        { text: "To report the results of a traffic-reduction programme", isCorrect: true },
+                        { text: "To advertise an electric bus", isCorrect: false },
+                        { text: "To explain how to open a shop", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: To report the results of a traffic-reduction programme[cite: 12, 18]."
+                },
+                {
+                    q: "12. Which vehicles could still enter the School Streets during restricted times?",
+                    options: [
+                        { text: "All parents' cars", isCorrect: false },
+                        { text: "Delivery trucks only", isCorrect: false },
+                        { text: "Residents' and emergency vehicles", isCorrect: true },
+                        { text: "Tour buses", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: Residents' and emergency vehicles[cite: 12, 18]."
+                },
+                {
+                    q: "13. Why was a free shuttle bus provided?",
+                    options: [
+                        { text: "To carry families from the public car park", isCorrect: true },
+                        { text: "To replace all city buses", isCorrect: false },
+                        { text: "To take shop owners home", isCorrect: false },
+                        { text: "To teach students road safety", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: To carry families from the public car park[cite: 12, 18]."
+                },
+                {
+                    q: "14. The word 'pilot' in paragraph 1 is closest in meaning to:",
+                    options: [
+                        { text: "driver", isCorrect: false },
+                        { text: "law", isCorrect: false },
+                        { text: "competition", isCorrect: false },
+                        { text: "trial programme", isCorrect: true }
+                    ],
+                    explanation: "Đáp án đúng: trial programme[cite: 12, 18]."
+                },
+                {
+                    q: "15. What can be inferred about the shop owners' concern?",
+                    options: [
+                        { text: "It was fully supported by the survey results.", isCorrect: false },
+                        { text: "It was reasonable but did not become a serious problem.", isCorrect: true },
+                        { text: "It caused the council to cancel the plan.", isCorrect: false },
+                        { text: "It was about air quality rather than sales.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: It was reasonable but did not become a serious problem[cite: 12, 18]."
+                }
+            ]
+        },
+        // Ex 8
+        {
+            section: "Exercise 8: Reading Passage 3",
+            passage: `<strong>Reading Passage (Ex 8):</strong> Minh lives in a busy suburb and studies downtown. In the past, he travelled by bus, and the journey often took more than an hour because the main road was congested. Six months ago, a new sky-train line opened near his home. Now Minh walks ten minutes to the station and reaches school in about thirty-five minutes.<br><br>
+            The sky train is usually reliable, and an app tells Minh when the next train will arrive. However, it can be packed with passengers at rush hour. A single ticket is also slightly more expensive than a bus ticket, so Minh buys a monthly student pass to cut down on travel costs.<br><br>
+            The new station has changed the neighbourhood. Small cafes and shops have opened nearby, making the area more convenient. On the other hand, some residents say rents are becoming pricey. The city council plans to plant more trees and add bicycle parking so that the station area will remain attractive and liveable[cite: 13].`,
+            questions: [
+                {
+                    q: "16. How long does Minh's journey take now?",
+                    options: [
+                        { text: "About ten minutes", isCorrect: false },
+                        { text: "About twenty minutes", isCorrect: false },
+                        { text: "About thirty-five minutes", isCorrect: true },
+                        { text: "More than an hour", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: About thirty-five minutes[cite: 13, 18]."
+                },
+                {
+                    q: "17. Why does Minh use a travel app?",
+                    options: [
+                        { text: "To check train arrival times", isCorrect: true },
+                        { text: "To buy food near the station", isCorrect: false },
+                        { text: "To report traffic accidents", isCorrect: false },
+                        { text: "To find a new apartment", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: To check train arrival times[cite: 13, 18]."
+                },
+                {
+                    q: "18. What drawback of the sky train is mentioned?",
+                    options: [
+                        { text: "It is often cancelled.", isCorrect: false },
+                        { text: "It can be crowded at rush hour.", isCorrect: true },
+                        { text: "It does not stop downtown.", isCorrect: false },
+                        { text: "It has no student passes.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: It can be crowded at rush hour[cite: 13, 18]."
+                },
+                {
+                    q: "19. What does the word 'it' in paragraph 2 refer to?",
+                    options: [
+                        { text: "the bus ticket", isCorrect: false },
+                        { text: "the app", isCorrect: false },
+                        { text: "the journey", isCorrect: false },
+                        { text: "the sky train", isCorrect: true }
+                    ],
+                    explanation: "Đáp án đúng: the sky train[cite: 13, 18]."
+                },
+                {
+                    q: "20. Which statement best describes the effects of the new station?",
+                    options: [
+                        { text: "They are entirely negative.", isCorrect: false },
+                        { text: "They are entirely positive.", isCorrect: false },
+                        { text: "They include both greater convenience and higher rents.", isCorrect: true },
+                        { text: "They have not changed the neighbourhood.", isCorrect: false }
+                    ],
+                    explanation: "Đáp án đúng: They include both greater convenience and higher rents[cite: 13, 18]."
+                }
+            ]
+        }
+    ];
+
+    let activeItems = [];
+
+    function shuffle(array) {
+        let arr = JSON.parse(JSON.stringify(array));
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function loadQuiz() {
+        // Trộn các bài đọc và trộn câu hỏi trong từng bài
+        activeItems = rawQuestions.map(sec => ({
+            section: sec.section,
+            passage: sec.passage,
+            questions: shuffle(sec.questions).map(q => ({
+                q: q.q,
+                options: shuffle(q.options),
+                explanation: q.explanation
+            }))
+        }));
+
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        let globalIndex = 0;
+        activeItems.forEach(item => {
+            let questionsHtml = '';
+            item.questions.forEach(q => {
+                let optionsHtml = '';
+                const labels = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, optIndex) => {
+                    optionsHtml += `
+                        <label class="option-label">
+                            <input type="radio" name="q-${globalIndex}" value="${optIndex}">
+                            <strong>${labels[optIndex]}.</strong>
+                            <span>${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                questionsHtml += `
+                    <div class="question-card" data-qid="${globalIndex}">
+                        <div class="q-title">${q.q}</div>
+                        <div>${optionsHtml}</div>
+                        <div id="exp-${globalIndex}" class="explanation"></div>
+                    </div>
+                `;
+                globalIndex++;
+            });
+
+            container.innerHTML += `
+                <div style="margin-bottom: 30px;">
+                    <div class="passage-box">${item.passage}</div>
+                    ${questionsHtml}
+                </div>
+            `;
+        });
+
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        let total = 0;
+
+        let globalIndex = 0;
+        activeItems.forEach(item => {
+            item.questions.forEach(q => {
+                const selected = document.querySelector(`input[name="q-${globalIndex}"]:checked`);
+                const expBox = document.getElementById(`exp-${globalIndex}`);
+                total++;
+
+                if (selected) {
+                    const selectedIdx = parseInt(selected.value);
+                    if (q.options[selectedIdx].isCorrect) {
+                        score++;
+                        expBox.className = "explanation correct";
+                        expBox.innerHTML = `<strong>Chính xác!</strong> ${q.explanation}`;
+                    } else {
+                        expBox.className = "explanation incorrect";
+                        expBox.innerHTML = `<strong>Chưa đúng.</strong> ${q.explanation}`;
+                    }
+                } else {
+                    expBox.className = "explanation unanswered";
+                    expBox.innerHTML = `<strong>Bạn chưa chọn!</strong> ${q.explanation}`;
+                }
+                globalIndex++;
+            });
+        });
+
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `Kết quả của bạn: ${score} / ${total} câu đúng!`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập GK1 - Phần 2 (Ex 9, 10, 11)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 15px; color: #334155; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #4f46e5; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .question-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .section-tag { font-size: 12px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-bottom: 5px; }
+        .q-title { font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+        .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+        .option-label:hover { background: #eef2ff; }
+        .explanation { margin-top: 10px; padding: 10px; font-size: 13px; border-radius: 6px; display: none; }
+        .explanation.correct { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: block; }
+        .explanation.incorrect { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; display: block; }
+        .explanation.unanswered { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        #submit-btn { background: #4f46e5; color: white; }
+        #reset-btn { background: #e2e8f0; color: #334155; }
+        #result-box { margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; display: none; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn Tập GK1 - Phần 2</h1>
+    <p class="subtitle">Exercise 9, 10, 11 (Trộn đề & Đảo đáp án tự động)</p>
+    
+    <div id="quiz-container"></div>
+
+    <div class="btn-group">
+        <button id="submit-btn" class="action-btn" onclick="checkAnswers()">Nộp Bài & Xem Kết Quả</button>
+        <button id="reset-btn" class="action-btn" onclick="loadQuiz()">🔄 Trộn Đề & Làm Lại</button>
+    </div>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    const rawQuestions = [
+        // Ex 9 - Sentence Arrangement
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "1. could / tell me / where / to buy / local pottery / ?",
+            options: [
+                { text: "Could tell me you where to buy local pottery?", isCorrect: false },
+                { text: "Could you tell me where to buy local pottery?", isCorrect: true },
+                { text: "Where could you tell me to buy local pottery?", isCorrect: false },
+                { text: "Could you where tell me to buy local pottery?", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Could you tell me where to buy local pottery?[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "2. artisans / pass down / their techniques / to younger generations / .",
+            options: [
+                { text: "Artisans pass down to younger generations their techniques.", isCorrect: false },
+                { text: "To younger generations pass down artisans their techniques.", isCorrect: false },
+                { text: "Their techniques artisans to younger generations pass down.", isCorrect: false },
+                { text: "Artisans pass down their techniques to younger generations.", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: Artisans pass down their techniques to younger generations.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "3. I / do not know / who / to ask / for help / .",
+            options: [
+                { text: "I do not know who to ask for help.", isCorrect: true },
+                { text: "I who do not know to ask for help.", isCorrect: false },
+                { text: "Who I do not know for help to ask.", isCorrect: false },
+                { text: "I do not know to ask who for help.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: I do not know who to ask for help.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "4. our neighbours / take care of / our garden / when / we are away / .",
+            options: [
+                { text: "When our neighbours are away, we take care of our garden.", isCorrect: false },
+                { text: "Our garden takes care of our neighbours when we are away.", isCorrect: false },
+                { text: "Our neighbours take care of our garden when we are away.", isCorrect: true },
+                { text: "We are away when our garden takes care of our neighbours.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Our neighbours take care of our garden when we are away.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "5. my home town / is famous for / a seafood speciality / .",
+            options: [
+                { text: "A seafood speciality is famous for my home town.", isCorrect: false },
+                { text: "My home town a seafood speciality is famous for.", isCorrect: false },
+                { text: "Is my home town famous for a seafood speciality.", isCorrect: false },
+                { text: "My home town is famous for a seafood speciality.", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: My home town is famous for a seafood speciality.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "6. the more reliable / public transport is / the fewer cars / people use / .",
+            options: [
+                { text: "The more reliable public transport is, the fewer cars people use.", isCorrect: true },
+                { text: "The fewer cars public transport is, the more reliable people use.", isCorrect: false },
+                { text: "Public transport is the more reliable, people use the fewer cars.", isCorrect: false },
+                { text: "The more reliable people use, the fewer cars public transport is.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: The more reliable public transport is, the fewer cars people use.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "7. the city council / is carrying out / a plan / to reduce congestion / .",
+            options: [
+                { text: "A plan is carrying out the city council to reduce congestion.", isCorrect: false },
+                { text: "To reduce congestion is carrying out a plan the city council.", isCorrect: false },
+                { text: "The city council is carrying out a plan to reduce congestion.", isCorrect: true },
+                { text: "The city council a plan to reduce congestion is carrying out.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: The city council is carrying out a plan to reduce congestion.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "8. teenagers / often hang out with / their friends / at the entertainment centre / .",
+            options: [
+                { text: "At the entertainment centre often hang out with teenagers their friends.", isCorrect: false },
+                { text: "Teenagers often hang out with their friends at the entertainment centre.", isCorrect: true },
+                { text: "Their friends often teenagers hang out with at the entertainment centre.", isCorrect: false },
+                { text: "Teenagers at the entertainment centre their friends often hang out with.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Teenagers often hang out with their friends at the entertainment centre.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "9. the more crowded / the street becomes / the slower / the traffic moves / .",
+            options: [
+                { text: "The street becomes the more crowded, the traffic moves the slower.", isCorrect: false },
+                { text: "The slower the street becomes, the more crowded the traffic moves.", isCorrect: false },
+                { text: "The traffic moves the more crowded, the street becomes the slower.", isCorrect: false },
+                { text: "The more crowded the street becomes, the slower the traffic moves.", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: The more crowded the street becomes, the slower the traffic moves.[cite: 13, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "10. we / usually get around / downtown / by metro / .",
+            options: [
+                { text: "We by metro usually get around downtown.", isCorrect: false },
+                { text: "Downtown by metro we get around usually.", isCorrect: false },
+                { text: "We usually get around downtown by metro.", isCorrect: true },
+                { text: "By downtown we usually get around metro.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: We usually get around downtown by metro.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "11. my school / has / a library / .",
+            options: [
+                { text: "My school a library has.", isCorrect: false },
+                { text: "Has my school a library.", isCorrect: false },
+                { text: "My school has a library.", isCorrect: true },
+                { text: "A library my school has.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: My school has a library.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "12. I / go to school / by bus / every day / .",
+            options: [
+                { text: "Every day by bus I school go.", isCorrect: false },
+                { text: "I by bus every day go to school.", isCorrect: false },
+                { text: "Go to school I by bus every day.", isCorrect: false },
+                { text: "I go to school by bus every day.", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: I go to school by bus every day.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "13. Lan / is doing / her assignment / now / .",
+            options: [
+                { text: "Lan is doing her assignment now.", isCorrect: true },
+                { text: "Her assignment Lan now is doing.", isCorrect: false },
+                { text: "Now doing Lan is her assignment.", isCorrect: false },
+                { text: "Lan her assignment is now doing.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Lan is doing her assignment now.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "14. we / should / eat healthy food / every day / .",
+            options: [
+                { text: "Every day healthy food should eat we.", isCorrect: false },
+                { text: "We should eat healthy food every day.", isCorrect: true },
+                { text: "We healthy food every day should eat.", isCorrect: false },
+                { text: "Should we eat every day healthy food.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: We should eat healthy food every day.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "15. the counsellor / gives / students / useful advice / .",
+            options: [
+                { text: "Students the counsellor useful advice gives.", isCorrect: false },
+                { text: "Useful advice students gives the counsellor.", isCorrect: false },
+                { text: "The counsellor gives students useful advice.", isCorrect: true },
+                { text: "Gives the counsellor students useful advice.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: The counsellor gives students useful advice.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "16. Nam / feels / stressed out / before exams / .",
+            options: [
+                { text: "Nam feels stressed out before exams.", isCorrect: true },
+                { text: "Before exams stressed out Nam feels.", isCorrect: false },
+                { text: "Nam before exams feels stressed out.", isCorrect: false },
+                { text: "Feels Nam stressed out before exams.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Nam feels stressed out before exams.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "17. there is / a public park / near / my house / .",
+            options: [
+                { text: "A public park my house is near there.", isCorrect: false },
+                { text: "There is a public park near my house.", isCorrect: true },
+                { text: "Near my house there a public park is.", isCorrect: false },
+                { text: "My house is there near a public park.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: There is a public park near my house.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "18. my brother / can / play football / very well / .",
+            options: [
+                { text: "Very well my brother football can play.", isCorrect: false },
+                { text: "Can my brother very well play football.", isCorrect: false },
+                { text: "My brother football very well can play.", isCorrect: false },
+                { text: "My brother can play football very well.", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: My brother can play football very well.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "19. we / do / physical exercise / after school / .",
+            options: [
+                { text: "After school physical exercise we do.", isCorrect: false },
+                { text: "We after school do physical exercise.", isCorrect: false },
+                { text: "We do physical exercise after school.", isCorrect: true },
+                { text: "Physical exercise after school do we.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: We do physical exercise after school.[cite: 14, 18]."
+        },
+        {
+            section: "Exercise 9: Sentence Arrangement",
+            question: "20. Mai / is / in a good mood / today / .",
+            options: [
+                { text: "Mai is in a good mood today.", isCorrect: true },
+                { text: "Today a good mood Mai is in.", isCorrect: false },
+                { text: "Mai today a good mood is in.", isCorrect: false },
+                { text: "In a good mood today is Mai.", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: Mai is in a good mood today.[cite: 15, 18]."
+        },
+        // Ex 10 - Unit 3 Vocabulary
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "21. Mai felt proud when she finally _______ all the tasks on her study plan.",
+            options: [
+                { text: "accomplished", isCorrect: true },
+                { text: "delayed", isCorrect: false },
+                { text: "minimised", isCorrect: false },
+                { text: "distracted", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: accomplished (hoàn thành)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "22. The teacher gave us an _______ reading task for students who wanted more practice.",
+            options: [
+                { text: "optimistic", isCorrect: false },
+                { text: "additional", isCorrect: true },
+                { text: "physical", isCorrect: false },
+                { text: "fattening", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: additional (thêm vào)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "23. Talking to the school _______ can help teenagers deal with personal problems.",
+            options: [
+                { text: "deadline", isCorrect: false },
+                { text: "priority", isCorrect: false },
+                { text: "counsellor", isCorrect: true },
+                { text: "assignment", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: counsellor (cố vấn)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "24. Please write the _______ of the project in your notebook so that you submit it on time.",
+            options: [
+                { text: "due date", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "distraction", isCorrect: false },
+                { text: "anxiety", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: due date (hạn chót)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "25. Turn off social media notifications because they can be a major _______ while you study.",
+            options: [
+                { text: "priority", isCorrect: false },
+                { text: "distraction", isCorrect: true },
+                { text: "deadline", isCorrect: false },
+                { text: "assignment", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: distraction (sự sao lãng)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "26. Too much fried food can be _______, so teenagers should not eat it very often.",
+            options: [
+                { text: "mental", isCorrect: false },
+                { text: "optimistic", isCorrect: false },
+                { text: "well-balanced", isCorrect: false },
+                { text: "fattening", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: fattening (gây béo)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "27. Regular exercise improves both your physical and _______ health.",
+            options: [
+                { text: "additional", isCorrect: false },
+                { text: "appropriate", isCorrect: false },
+                { text: "mental", isCorrect: true },
+                { text: "delayed", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: mental (tinh thần)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "28. When you have many tasks, decide which one has the highest _______.",
+            options: [
+                { text: "priority", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "optimistic", isCorrect: false },
+                { text: "additional", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: priority (sự ưu tiên)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "29. Nam felt _______ because he had three tests in the same week.",
+            options: [
+                { text: "well-balanced", isCorrect: false },
+                { text: "stressed out", isCorrect: true },
+                { text: "well-balanced", isCorrect: false },
+                { text: "delayed", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: stressed out (căng thẳng)[cite: 15, 18]."
+        },
+        {
+            section: "Exercise 10: Unit 3 Vocabulary",
+            question: "30. A _______ diet should include enough vegetables, fruit, protein, and healthy carbohydrates.",
+            options: [
+                { text: "fattening", isCorrect: false },
+                { text: "anxiety", isCorrect: false },
+                { text: "well-balanced", isCorrect: true },
+                { text: "mental", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: well-balanced (cân bằng)[cite: 15, 18]."
+        },
+        // Ex 11 - Fill in blanks (Converted to multiple choice based on answers)
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "31. The science _______ must be handed in before Friday.",
+            options: [
+                { text: "assignment", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: assignment[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "32. We should speak _______ when we discuss a sensitive problem with a friend.",
+            options: [
+                { text: "assignment", isCorrect: false },
+                { text: "appropriately", isCorrect: true },
+                { text: "minimise", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: appropriately[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "33. A short walk can improve your _______ after a stressful lesson.",
+            options: [
+                { text: "mood", isCorrect: true },
+                { text: "deadline", isCorrect: false },
+                { text: "anxiety", isCorrect: false },
+                { text: "priority", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: mood[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "34. The final _______ for the poster competition is 30 September.",
+            options: [
+                { text: "delay", isCorrect: false },
+                { text: "deadline", isCorrect: true },
+                { text: "optimistic", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: deadline[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "35. Good time management can help _______ stress before examinations.",
+            options: [
+                { text: "minimise", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "anxiety", isCorrect: false },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: minimise[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "36. Do not _______ asking for help when you feel unable to cope.",
+            options: [
+                { text: "minimise", isCorrect: false },
+                { text: "delay", isCorrect: true },
+                { text: "optimistic", isCorrect: false },
+                { text: "priority", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: delay[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "37. Sleep and _______ activity are both important for teenage health.",
+            options: [
+                { text: "physical", isCorrect: true },
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "anxiety", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: physical[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "38. Linh is _______ that she will achieve her study goals.",
+            options: [
+                { text: "delay", isCorrect: false },
+                { text: "optimistic", isCorrect: true },
+                { text: "priority", isCorrect: false },
+                { text: "assignment", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: optimistic[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "39. Finishing the most urgent task first should be your top _______.",
+            options: [
+                { text: "mood", isCorrect: false },
+                { text: "deadline", isCorrect: false },
+                { text: "priority", isCorrect: true },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: priority[cite: 15]."
+        },
+        {
+            section: "Exercise 11: Fill in blanks",
+            question: "40. Deep breathing may reduce _______ before a presentation.",
+            options: [
+                { text: "anxiety", isCorrect: true },
+                { text: "assignment", isCorrect: false },
+                { text: "mood", isCorrect: false },
+                { text: "physical", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: anxiety[cite: 15]."
+        }
+    ];
+
+    let activeQuestions = [];
+
+    function shuffle(array) {
+        let arr = JSON.parse(JSON.stringify(array));
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function loadQuiz() {
+        activeQuestions = shuffle(rawQuestions).map((q, index) => ({
+            id: index + 1,
+            section: q.section,
+            question: q.question,
+            options: shuffle(q.options),
+            explanation: q.explanation
+        }));
+
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        activeQuestions.forEach((q, qIndex) => {
+            let optionsHtml = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label">
+                        <input type="radio" name="q-${qIndex}" value="${optIndex}">
+                        <strong>${labels[optIndex]}.</strong>
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="question-card">
+                    <div class="section-tag">${q.section}</div>
+                    <div class="q-title">Câu ${q.id}: ${q.question}</div>
+                    <div>${optionsHtml}</div>
+                    <div id="exp-${qIndex}" class="explanation"></div>
+                </div>
+            `;
+        });
+
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function checkAnswers() {
+        let score = 0;
+
+        activeQuestions.forEach((q, qIndex) => {
+            const selected = document.querySelector(`input[name="q-${qIndex}"]:checked`);
+            const expBox = document.getElementById(`exp-${qIndex}`);
+
+            if (selected) {
+                const selectedIdx = parseInt(selected.value);
+                if (q.options[selectedIdx].isCorrect) {
+                    score++;
+                    expBox.className = "explanation correct";
+                    expBox.innerHTML = `<strong>Chính xác!</strong> ${q.explanation}`;
+                } else {
+                    expBox.className = "explanation incorrect";
+                    expBox.innerHTML = `<strong>Chưa đúng.</strong> ${q.explanation}`;
+                }
+            } else {
+                expBox.className = "explanation unanswered";
+                expBox.innerHTML = `<strong>Bạn chưa chọn!</strong> ${q.explanation}`;
+            }
+        });
+
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `Kết quả của bạn: ${score} / ${activeQuestions.length} câu đúng!`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>

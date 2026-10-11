@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập GK1 - Phần 1 (Ex 3, 3B, 4)</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f1f5f9; margin: 0; padding: 15px; color: #334155; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #4f46e5; font-size: 22px; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .question-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .section-tag { font-size: 12px; font-weight: bold; color: #4f46e5; text-transform: uppercase; margin-bottom: 5px; }
+        .q-title { font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+        .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+        .option-label:hover { background: #eef2ff; }
+        .explanation { margin-top: 10px; padding: 10px; font-size: 13px; border-radius: 6px; display: none; }
+        .explanation.correct { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: block; }
+        .explanation.incorrect { background: #fff1f2; color: #9f1239; border: 1px solid #fecdd3; display: block; }
+        .explanation.unanswered { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; display: block; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .action-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        #submit-btn { background: #4f46e5; color: white; }
+        #reset-btn { background: #e2e8f0; color: #334155; }
+        #result-box { margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; display: none; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn Tập GK1 - Phần 1</h1>
+    <p class="subtitle">Exercise 3, 3B, 4 (Trộn đề & Đảo đáp án tự động)</p>
+    
+    <div id="quiz-container"></div>
+
+    <div class="btn-group">
+        <button id="submit-btn" class="action-btn" onclick="checkAnswers()">Nộp Bài & Xem Kết Quả</button>
+        <button id="reset-btn" class="action-btn" onclick="loadQuiz()">🔄 Trộn Đề & Làm Lại</button>
+    </div>
+
+    <div id="result-box"></div>
+</div>
+
+<script>
+    const rawQuestions = [
+        // Ex 3 - Vocabulary & Grammar
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "1. The local _______ repaired the broken wires in our community hall.",
+            options: [
+                { text: "artisan", isCorrect: false },
+                { text: "electrician", isCorrect: true },
+                { text: "firefighter", isCorrect: false },
+                { text: "delivery person", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: electrician (thợ điện)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "2. The artisans work hard to _______ the traditional way of making paper fans.",
+            options: [
+                { text: "shorten", isCorrect: false },
+                { text: "damage", isCorrect: false },
+                { text: "replace", isCorrect: false },
+                { text: "preserve", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: preserve (bảo tồn)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "3. Banh da cua is a well-known _______ of Hai Phong.",
+            options: [
+                { text: "facility", isCorrect: false },
+                { text: "function", isCorrect: false },
+                { text: "speciality", isCorrect: true },
+                { text: "fragrance", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: speciality (đặc sản)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "4. A _______ brings parcels and online orders to people's homes.",
+            options: [
+                { text: "delivery person", isCorrect: true },
+                { text: "police officer", isCorrect: false },
+                { text: "garbage collector", isCorrect: false },
+                { text: "firefighter", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: delivery person (nhân viên giao hàng)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "5. The fresh leaves give the tea a pleasant _______.",
+            options: [
+                { text: "function", isCorrect: false },
+                { text: "fragrance", isCorrect: true },
+                { text: "suburb", isCorrect: false },
+                { text: "facility", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: fragrance (hương thơm)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "6. Parks, libraries, and _______ sports centres are useful public amenities in a city.",
+            options: [
+                { text: "construction sites", isCorrect: false },
+                { text: "concrete jungles", isCorrect: false },
+                { text: "public amenities", isCorrect: true },
+                { text: "rush hours", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: public amenities (tiện ích công cộng)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "7. Visitors can _______ the city easily by metro and tram.",
+            options: [
+                { text: "get around", isCorrect: true },
+                { text: "come down with", isCorrect: false },
+                { text: "run out of", isCorrect: false },
+                { text: "pass down", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: get around (di chuyển)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "8. The road is dusty and noisy because there is a _______ nearby.",
+            options: [
+                { text: "sky train", isCorrect: false },
+                { text: "construction site", isCorrect: true },
+                { text: "public amenity", isCorrect: false },
+                { text: "suburb", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: construction site (công trường xây dựng)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "9. The old market becomes especially _______ at weekends, with hundreds of shoppers and street sellers.",
+            options: [
+                { text: "liveable", isCorrect: false },
+                { text: "itchy", isCorrect: false },
+                { text: "original", isCorrect: false },
+                { text: "bustling", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: bustling (nhộn nhịp)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Multiple Choice",
+            question: "10. It is better to avoid the main road during _______ because traffic is extremely heavy.",
+            options: [
+                { text: "hygiene", isCorrect: false },
+                { text: "rush hour", isCorrect: true },
+                { text: "downtown", isCorrect: false },
+                { text: "process", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: rush hour (giờ cao điểm)[cite: 8, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "11. We have not decided _______ to invite to the community meeting.",
+            options: [
+                { text: "who", isCorrect: true },
+                { text: "where", isCorrect: false },
+                { text: "when", isCorrect: false },
+                { text: "how", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: who (Cấu trúc từ để hỏi + to V)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "12. Could you show me _______ to use this ticket machine?",
+            options: [
+                { text: "what", isCorrect: false },
+                { text: "when", isCorrect: false },
+                { text: "how", isCorrect: true },
+                { text: "where", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: how (chỉ cách thức sử dụng)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "13. Please find out _______ to visit the pottery museum; it closes early on weekdays.",
+            options: [
+                { text: "who", isCorrect: false },
+                { text: "when", isCorrect: true },
+                { text: "what", isCorrect: false },
+                { text: "how", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: when (hỏi thời điểm)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "14. Our neighbours will _______ our dog while we are away.",
+            options: [
+                { text: "look around", isCorrect: false },
+                { text: "come back", isCorrect: false },
+                { text: "run out of", isCorrect: false },
+                { text: "take care of", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: take care of (chăm sóc)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "15. You can check the community website to _______ more about the craft fair.",
+            options: [
+                { text: "find out", isCorrect: true },
+                { text: "pass down", isCorrect: false },
+                { text: "cut down on", isCorrect: false },
+                { text: "get on with", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: find out (tìm hiểu)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "16. The wider the roads are, _______ traffic moves.",
+            options: [
+                { text: "more smooth", isCorrect: false },
+                { text: "the more smoothly", isCorrect: true },
+                { text: "the smoothest", isCorrect: false },
+                { text: "more smoothly", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: the more smoothly (Cấu trúc so sánh kép)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "17. The more crowded a bus is, _______ it becomes for passengers.",
+            options: [
+                { text: "uncomfortable", isCorrect: false },
+                { text: "the most uncomfortable", isCorrect: false },
+                { text: "the more uncomfortable", isCorrect: true },
+                { text: "more uncomfortable", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: the more uncomfortable[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "18. The _______ public transport becomes, the fewer private vehicles people use.",
+            options: [
+                { text: "more reliable", isCorrect: true },
+                { text: "most reliable", isCorrect: false },
+                { text: "reliabler", isCorrect: false },
+                { text: "reliable", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: more reliable[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "19. The city council plans to _______ a survey on public transport next month.",
+            options: [
+                { text: "hang out with", isCorrect: false },
+                { text: "come down with", isCorrect: false },
+                { text: "get around", isCorrect: false },
+                { text: "carry out", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: carry out (tiến hành)[cite: 9, 17]."
+        },
+        {
+            section: "Exercise 3: Grammar",
+            question: "20. Nam missed school because he _______ a bad cold.",
+            options: [
+                { text: "cut down on", isCorrect: false },
+                { text: "came down with", isCorrect: true },
+                { text: "carried out", isCorrect: false },
+                { text: "got around", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: came down with (bị ốm)[cite: 10, 17]."
+        },
+        // Ex 3B - Error Correction
+        {
+            section: "Exercise 3B: Find Error",
+            question: "21. We have not decided [who invite] to the community meeting next Friday.",
+            options: [
+                { text: "who invite (Sửa thành: who to invite)", isCorrect: true },
+                { text: "decided", isCorrect: false },
+                { text: "community", isCorrect: false },
+                { text: "next Friday", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: who invite -> sửa thành who to invite[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "22. The tour guide showed us [what making] a paper lantern.",
+            options: [
+                { text: "what making (Sửa thành: how to make)", isCorrect: true },
+                { text: "tour guide", isCorrect: false },
+                { text: "showed", isCorrect: false },
+                { text: "paper lantern", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: what making -> sửa thành how to make[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "23. The artisans passed their skills down [for] younger villagers last year.",
+            options: [
+                { text: "for (Sửa thành: to)", isCorrect: true },
+                { text: "passed down", isCorrect: false },
+                { text: "skills", isCorrect: false },
+                { text: "last year", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: for -> sửa thành to (pass down to somebody)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "24. Our neighbours will [take care] our cat while we are away.",
+            options: [
+                { text: "take care (Sửa thành: take care of)", isCorrect: true },
+                { text: "neighbours", isCorrect: false },
+                { text: "while", isCorrect: false },
+                { text: "away", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: take care -> sửa thành take care of[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "25. We [ran out] rice during the community meal, so Nam bought some more.",
+            options: [
+                { text: "ran out (Sửa thành: ran out of)", isCorrect: true },
+                { text: "community meal", isCorrect: false },
+                { text: "bought", isCorrect: false },
+                { text: "some more", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: ran out -> sửa thành ran out of[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "26. The busier the city becomes, [more crowded] its streets get.",
+            options: [
+                { text: "more crowded (Sửa thành: the more crowded)", isCorrect: true },
+                { text: "busier", isCorrect: false },
+                { text: "becomes", isCorrect: false },
+                { text: "streets get", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: more crowded -> sửa thành the more crowded[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "27. The more reliable the metro is, [the few] cars people use.",
+            options: [
+                { text: "the few (Sửa thành: the fewer)", isCorrect: true },
+                { text: "reliable", isCorrect: false },
+                { text: "metro", isCorrect: false },
+                { text: "people use", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: the few -> sửa thành the fewer[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "28. The taller the buildings are, [the little] sunlight reaches the narrow streets.",
+            options: [
+                { text: "the little (Sửa thành: the less)", isCorrect: true },
+                { text: "taller", isCorrect: false },
+                { text: "reaches", isCorrect: false },
+                { text: "narrow streets", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: the little -> sửa thành the less[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "29. Mai [came down] a cold after standing in the rain.",
+            options: [
+                { text: "came down (Sửa thành: came down with)", isCorrect: true },
+                { text: "standing", isCorrect: false },
+                { text: "in the rain", isCorrect: false },
+                { text: "Mai", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: came down -> sửa thành came down with[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 3B: Find Error",
+            question: "30. The city council plans to [carry on] a survey about public transport.",
+            options: [
+                { text: "carry on (Sửa thành: carry out)", isCorrect: true },
+                { text: "council", isCorrect: false },
+                { text: "plans to", isCorrect: false },
+                { text: "about", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: carry on -> sửa thành carry out[cite: 10, 17]."
+        },
+        // Ex 4 - Opposite & Closest
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "31. Opposite of 'preserve': The artisans preserve the old weaving techniques.",
+            options: [
+                { text: "protect", isCorrect: false },
+                { text: "maintain", isCorrect: false },
+                { text: "damage", isCorrect: true },
+                { text: "keep", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: damage (phá hủy >< bảo tồn)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "32. Opposite of 'suburb': Lan's family moved from the city centre to a quiet suburb.",
+            options: [
+                { text: "city centre", isCorrect: true },
+                { text: "village", isCorrect: false },
+                { text: "neighbourhood", isCorrect: false },
+                { text: "craft village", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: city centre (trung tâm thành phố >< ngoại ô)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "33. Opposite of 'original': The museum displays the original design of the conical hat.",
+            options: [
+                { text: "authentic", isCorrect: false },
+                { text: "copied", isCorrect: true },
+                { text: "traditional", isCorrect: false },
+                { text: "local", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: copied (bản sao >< nguyên bản)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "34. Opposite of 'popular': The weekend craft fair is popular with young visitors.",
+            options: [
+                { text: "busy", isCorrect: false },
+                { text: "crowded", isCorrect: false },
+                { text: "famous", isCorrect: false },
+                { text: "unpopular", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: unpopular (không phổ biến >< phổ biến)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "35. Opposite of 'pleasant': The natural fragrance of the tea is pleasant.",
+            options: [
+                { text: "strong", isCorrect: false },
+                { text: "sweet", isCorrect: false },
+                { text: "unpleasant", isCorrect: true },
+                { text: "natural", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: unpleasant (không dễ chịu >< dễ chịu)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "36. Opposite of 'bustling': The streets around the night market are bustling.",
+            options: [
+                { text: "quiet", isCorrect: true },
+                { text: "modern", isCorrect: false },
+                { text: "crowded", isCorrect: false },
+                { text: "bright", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: quiet (yên tĩnh >< náo nhiệt)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "37. Opposite of 'pricey': Apartments downtown are often pricey.",
+            options: [
+                { text: "modern", isCorrect: false },
+                { text: "affordable", isCorrect: true },
+                { text: "convenient", isCorrect: false },
+                { text: "large", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: affordable (phải chăng >< đắt đỏ)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "38. Opposite of 'liveable': With clean parks and reliable transport, the area is highly liveable.",
+            options: [
+                { text: "safe", isCorrect: false },
+                { text: "comfortable", isCorrect: false },
+                { text: "unfit to live in", isCorrect: true },
+                { text: "convenient", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: unfit to live in (không đáng sống)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "39. Opposite of 'downtown': Their new office is located downtown.",
+            options: [
+                { text: "city centre", isCorrect: false },
+                { text: "suburbs", isCorrect: true },
+                { text: "business district", isCorrect: false },
+                { text: "station", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: suburbs (vùng ngoại ô >< trung tâm)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Opposite Meaning",
+            question: "40. Opposite of 'congested': The main road is congested every morning.",
+            options: [
+                { text: "narrow", isCorrect: false },
+                { text: "busy", isCorrect: false },
+                { text: "clear", isCorrect: true },
+                { text: "dusty", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: clear (thông thoáng >< tắc nghẽn)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "41. Closest to 'artisan': Each artisan makes the product by hand.",
+            options: [
+                { text: "tour guide", isCorrect: false },
+                { text: "shop owner", isCorrect: false },
+                { text: "craft worker", isCorrect: true },
+                { text: "customer", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: craft worker (thợ thủ công)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "42. Closest to 'speciality': Seafood noodles are a local speciality.",
+            options: [
+                { text: "special local product", isCorrect: true },
+                { text: "daily meal", isCorrect: false },
+                { text: "cheap snack", isCorrect: false },
+                { text: "foreign dish", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: special local product (sản phẩm đặc trưng địa phương)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "43. Closest to 'gets on with': Mai gets on with all her new neighbours.",
+            options: [
+                { text: "looks for", isCorrect: false },
+                { text: "has a good relationship with", isCorrect: true },
+                { text: "takes after", isCorrect: false },
+                { text: "moves away from", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: has a good relationship with (có mối quan hệ tốt)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "44. Closest to 'pass down': Older villagers pass down their skills to young people.",
+            options: [
+                { text: "give up", isCorrect: false },
+                { text: "look around", isCorrect: false },
+                { text: "find out", isCorrect: false },
+                { text: "hand down", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: hand down (truyền lại)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "45. Closest to 'find out': We visited the museum to find out about the history of pottery.",
+            options: [
+                { text: "forget", isCorrect: false },
+                { text: "protect", isCorrect: false },
+                { text: "discover", isCorrect: true },
+                { text: "change", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: discover (khám phá, tìm hiểu)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "46. Closest to 'public amenities': The district has good public amenities, including parks and libraries.",
+            options: [
+                { text: "public facilities", isCorrect: true },
+                { text: "private homes", isCorrect: false },
+                { text: "office buildings", isCorrect: false },
+                { text: "tourist groups", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: public facilities (cơ sở vật chất công cộng)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "47. Closest to 'get around': It is easy to get around the city by metro.",
+            options: [
+                { text: "leave the city", isCorrect: false },
+                { text: "wait in traffic", isCorrect: false },
+                { text: "travel from place to place", isCorrect: true },
+                { text: "walk home", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: travel from place to place (di chuyển từ nơi này sang nơi khác)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "48. Closest to 'carry out': The council will carry out a study on road safety.",
+            options: [
+                { text: "cancel", isCorrect: false },
+                { text: "conduct", isCorrect: true },
+                { text: "discuss", isCorrect: false },
+                { text: "delay", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: conduct (tiến hành, thực hiện)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "49. Closest to 'hang out with': Teenagers often hang out with friends at the sports centre.",
+            options: [
+                { text: "take care of", isCorrect: false },
+                { text: "argue with", isCorrect: false },
+                { text: "study about", isCorrect: false },
+                { text: "spend free time with", isCorrect: true }
+            ],
+            explanation: "Đáp án đúng: spend free time with (dành thời gian đi chơi cùng)[cite: 10, 17]."
+        },
+        {
+            section: "Exercise 4: Closest Meaning",
+            question: "50. Closest to 'packed with': The bus was packed with passengers at rush hour.",
+            options: [
+                { text: "crowded with", isCorrect: true },
+                { text: "empty of", isCorrect: false },
+                { text: "safe for", isCorrect: false },
+                { text: "late for", isCorrect: false }
+            ],
+            explanation: "Đáp án đúng: crowded with (đông đúc, chật cứng)[cite: 10, 17]."
+        }
+    ];
+
+    let activeQuestions = [];
+
+    function shuffle(array) {
+        let arr = JSON.parse(JSON.stringify(array));
+        for (let i = arr.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function loadQuiz() {
+        activeQuestions = shuffle(rawQuestions).map((q, index) => ({
+            id: index + 1,
+            section: q.section,
+            question: q.question,
+            options: shuffle(q.options),
+            explanation: q.explanation
+        }));
+
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+
+        activeQuestions.forEach((q, qIndex) => {
+            let optionsHtml = '';
+            const labels = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label">
+                        <input type="radio" name="q-${qIndex}" value="${optIndex}">
+                        <strong>${labels[optIndex]}.</strong>
+                        <span>${opt.text}</span>
+                    </label>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="question-card">
+                    <div class="section-tag">${q.section}</div>
+                    <div class="q-title">Câu ${q.id}: ${q.question}</div>
+                    <div>${optionsHtml}</div>
+                    <div id="exp-${qIndex}" class="explanation"></div>
+                </div>
+            `;
+        });
+
+        document.getElementById('result-box').style.display = 'none';
+    }
+
+    function checkAnswers() {
+        let score = 0;
+
+        activeQuestions.forEach((q, qIndex) => {
+            const selected = document.querySelector(`input[name="q-${qIndex}"]:checked`);
+            const expBox = document.getElementById(`exp-${qIndex}`);
+
+            if (selected) {
+                const selectedIdx = parseInt(selected.value);
+                if (q.options[selectedIdx].isCorrect) {
+                    score++;
+                    expBox.className = "explanation correct";
+                    expBox.innerHTML = `<strong>Chính xác!</strong> ${q.explanation}`;
+                } else {
+                    expBox.className = "explanation incorrect";
+                    expBox.innerHTML = `<strong>Chưa đúng.</strong> ${q.explanation}`;
+                }
+            } else {
+                expBox.className = "explanation unanswered";
+                expBox.innerHTML = `<strong>Bạn chưa chọn!</strong> ${q.explanation}`;
+            }
+        });
+
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `Kết quả của bạn: ${score} / ${activeQuestions.length} câu đúng!`;
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>
